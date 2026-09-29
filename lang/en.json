@@ -1,0 +1,4 @@
+{
+  "ZFT_TENSION.Settings.Debug.Name": "ZFT Tension Pool: Debug Logging",
+  "ZFT_TENSION.Settings.Debug.Hint": "Enable focused [ZFT] diagnostic logging for the tension pool module."
+}

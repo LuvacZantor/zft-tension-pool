@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run tests
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm test
+
+      - name: Build Foundry package
+        run: |
+          zip -r zft-tension-pool.zip \
+            module.json \
+            scripts \
+            templates \
+            styles \
+            lang \
+            LICENSE \
+            THIRD_PARTY_NOTICES.md \
+            README.md \
+            CHANGELOG.md
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            module.json
+            zft-tension-pool.zip

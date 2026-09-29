@@ -1,0 +1,104 @@
+.zft-tension-pool {
+  z-index: 80;
+  pointer-events: auto;
+}
+
+.zft-tension-pool .window-content,
+.zft-tension-pool .application-content {
+  padding: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.zft-tp-shell {
+  width: 390px;
+  padding: 10px;
+  border: 1px solid rgba(190, 35, 45, 0.8);
+  border-radius: 10px;
+  background: rgba(18, 18, 22, 0.94);
+  color: #eee;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  user-select: none;
+  backdrop-filter: blur(4px);
+}
+
+.zft-tp-shell.is-collapsed { width: auto; min-width: 130px; padding: 6px 8px; }
+
+.zft-tp-header,
+.zft-tp-status,
+.zft-tp-profile-row,
+.zft-tp-actions,
+.zft-tp-config-footer,
+.zft-tp-inline-actions {
+  display: flex;
+  align-items: center;
+}
+
+.zft-tp-header { justify-content: space-between; gap: 8px; cursor: grab; }
+.zft-tp-title { display: flex; align-items: center; gap: 7px; font-weight: 700; letter-spacing: 0.03em; }
+.zft-tp-header-actions { display: flex; gap: 4px; }
+.zft-tp-header button,
+.zft-tp-actions button { min-width: 30px; height: 30px; margin: 0; }
+
+.zft-tp-profile-row { gap: 8px; margin-top: 8px; }
+.zft-tp-profile-row label { font-size: 0.8rem; opacity: 0.75; }
+.zft-tp-profile-row select { flex: 1; min-width: 0; }
+
+.zft-tp-pool {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+  margin: 12px 0 8px;
+  min-height: 30px;
+  font-size: 1.55rem;
+}
+
+.zft-tp-pool .fa-skull { color: #d84a55; text-shadow: 0 0 8px rgba(216, 74, 85, 0.4); }
+.zft-tp-pool .fa-circle { opacity: 0.3; }
+.zft-tp-status { justify-content: space-between; font-size: 0.78rem; opacity: 0.82; }
+.zft-tp-actions { gap: 6px; margin-top: 8px; }
+.zft-tp-actions.primary button { flex: 1; }
+.zft-tp-actions.secondary button:first-child { flex: 1; }
+.zft-tp-actions.secondary button:last-child { flex: 1; }
+
+.zft-tp-history {
+  margin-top: 9px;
+  padding-top: 7px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  opacity: 0.75;
+}
+
+.zft-tp-chat-card {
+  padding: 8px 10px;
+  border-left: 3px solid #8b2635;
+  background: rgba(100, 20, 30, 0.07);
+}
+.zft-tp-chat-card header { font-weight: 700; margin-bottom: 5px; }
+.zft-tp-chat-reason { font-style: italic; opacity: 0.8; margin-bottom: 5px; }
+.zft-tp-chat-dice { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
+.zft-tp-result-die {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+  font-weight: 700;
+}
+.zft-tp-result-die.is-hit,
+.zft-tp-danger { color: #b52636; }
+.zft-tp-safe { color: #2f7a47; }
+.zft-tp-chat-card.is-secret { text-align: center; opacity: 0.8; }
+.zft-tp-chat-card.is-complication { border-left-color: #b52636; }
+.zft-tp-chat-card.is-complication ol { margin: 6px 0 0 20px; }
+
+.zft-tension-config .window-content { padding: 12px; }
+.zft-tp-config-body fieldset { margin: 12px 0; padding: 10px; }
+.zft-tp-config-body legend { font-weight: 700; }
+.zft-tp-inline-actions { gap: 5px; margin-left: 8px; }
+.zft-tp-config-footer { justify-content: space-between; gap: 10px; margin-top: 14px; }
+.zft-tp-config-footer button { flex: 1; }

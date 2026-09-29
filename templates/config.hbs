@@ -1,0 +1,48 @@
+<div class="zft-tp-config-body">
+  <div class="form-group">
+    <label>Active Profile</label>
+    <select name="activeProfile">
+      {{#each profiles}}
+        <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+      {{/each}}
+    </select>
+    <div class="form-fields zft-tp-inline-actions">
+      <button type="button" data-action="newProfile"><i class="fa-solid fa-plus"></i> New</button>
+      <button type="button" data-action="deleteProfile" {{#if isOnlyProfile}}disabled{{/if}}><i class="fa-solid fa-trash"></i> Delete</button>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="form-group"><label>Name</label><input type="text" name="name" value="{{profile.name}}"></div>
+  <div class="form-group"><label>Pool Size</label><input type="number" name="poolSize" min="1" max="20" value="{{profile.poolSize}}"></div>
+  <div class="form-group">
+    <label>Die</label>
+    <select name="dieFaces">
+      {{#each dieOptions}}<option value="{{faces}}" {{#if selected}}selected{{/if}}>d{{faces}}</option>{{/each}}
+    </select>
+  </div>
+  <div class="form-group"><label>Complication Faces</label><input type="text" name="triggerValues" value="{{profile.triggerValues}}"><p class="hint">Comma-separated die faces. Standard Tension Pool uses 1.</p></div>
+
+  <fieldset>
+    <legend>Complications</legend>
+    <div class="form-group"><label>Normal RollTable UUID</label><input type="text" name="normalTableUuid" value="{{profile.normalTableUuid}}" placeholder="RollTable.xxxxx"></div>
+    <div class="form-group"><label>Severe RollTable UUID</label><input type="text" name="severeTableUuid" value="{{profile.severeTableUuid}}" placeholder="RollTable.xxxxx"></div>
+    <div class="form-group"><label>Severe Threshold</label><input type="number" name="severeThreshold" min="2" max="20" value="{{profile.severeThreshold}}"><p class="hint">At this many complication faces, draw once from the Severe table instead of drawing once per complication from the Normal table.</p></div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Visibility</legend>
+    <div class="form-group"><label>Roll Results</label><select name="rollVisibility">{{#each rollVisibilityOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="form-group"><label>Complications</label><select name="complicationVisibility">{{#each complicationVisibilityOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="form-group"><label>Public Secret Notice</label><input type="checkbox" name="publicSecretNotice" {{#if profile.publicSecretNotice}}checked{{/if}}></div>
+    <div class="form-group"><label>Show Reasons to Players</label><input type="checkbox" name="showReasonsToPlayers" {{#if profile.showReasonsToPlayers}}checked{{/if}}></div>
+  </fieldset>
+
+  <div class="form-group"><label>History Entries</label><input type="number" name="maxHistory" min="5" max="100" value="{{profile.maxHistory}}"></div>
+
+  <footer class="zft-tp-config-footer">
+    <button type="button" data-action="resetPool"><i class="fa-solid fa-rotate-left"></i> Admin Reset Pool</button>
+    <button type="button" data-action="save"><i class="fa-solid fa-floppy-disk"></i> Save Profile</button>
+  </footer>
+</div>
