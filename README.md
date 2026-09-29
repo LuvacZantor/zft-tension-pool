@@ -2,7 +2,7 @@
 
 A system-driven Tension Pool module for Foundry Virtual Tabletop.
 
-Version: 0.1.0
+Version: 0.1.1
 
 ## Compatibility
 
@@ -26,7 +26,7 @@ The default profile follows the published Tension Pool procedure:
 
 - Persistent world-level tension state.
 - Read-only player display and GM controls.
-- Draggable/collapsible ApplicationV2 widget.
+- Compact, draggable/collapsible ApplicationV2 icon widget patterned after Tension Pool 2.
 - Time, Risk, Both, Custom Add, Remove, and Break controls.
 - Accurate displayed complication probability for the current risk roll.
 - Multiple named profiles.
@@ -36,7 +36,7 @@ The default profile follows the published Tension Pool procedure:
 - Separate roll-result and complication visibility.
 - Optional public notice when secret rolls/complications occur.
 - Persistent recent event history.
-- Optional Dice So Nice animation using ordinary Foundry dice.
+- Optional Dice So Nice integration using a custom tension die with marked complication faces.
 - Public module API and custom hooks.
 - Focused `[ZFT]` debug logging.
 
@@ -88,14 +88,15 @@ Copy the `zft-tension-pool` directory into Foundry's `Data/modules/` directory, 
 
 1. Enable the module in a V13 Build 351 or V14 test world.
 2. Confirm the floating widget appears for GM and players.
-3. Click `Time` five times. Expected: pool shows 5/6.
-4. Click `Risk`. Expected: 5d6 rolls and the pool remains 5/6.
-5. Click `Time`. Expected: the sixth die causes a 6d6 roll and the pool becomes 0/6.
-6. With an empty pool, click `Risk`. Expected: 1d6 rolls and the pool remains empty.
+3. Use the plus icon five times. Expected: five solid skulls appear.
+4. Use the dice icon. Expected: 5 tension dice roll and the pool remains at five skulls.
+5. Use the plus icon again. Expected: the sixth die causes a six-die roll and the pool clears.
+6. With an empty pool, use the dice icon. Expected: one temporary tension die rolls and the pool remains empty.
 7. Configure a Normal RollTable UUID and force a complication. Expected: complication result is posted according to configured visibility.
 8. Configure a Severe RollTable and threshold, then generate enough trigger faces. Expected: the Severe table is used once.
-9. Switch profiles. Expected: profile UI, pool limit, die size, and risk percentage update on all clients.
-10. Enable debug logging and confirm diagnostic messages begin with `[ZFT]`.
+9. Change profiles from the configuration window. Expected: pool size, die size, trigger faces, and risk tooltip update.
+10. Drag the hourglass handle, release it, and refresh. Expected: the widget remains at the saved position.
+11. Enable debug logging and confirm diagnostic messages begin with `[ZFT]`.
 
 ## Attribution
 

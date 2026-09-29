@@ -1,6 +1,6 @@
 export const MODULE_ID = "zft-tension-pool";
 export const MODULE_TITLE = "ZFT Tension Pool";
-export const VERSION = "0.1.0";
+export const VERSION = "0.1.1";
 
 export const HOOKS = Object.freeze({
   READY: "zftTensionPoolReady",

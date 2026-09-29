@@ -4,12 +4,18 @@ import { createAPI } from "./api.js";
 import { TensionPoolApp } from "./tension-pool-app.js";
 import { validateState } from "./engine.js";
 import { debug, error } from "./logger.js";
+import { registerTensionDie, registerDiceSoNice } from "./tension-die.js";
 
 console.log(`[ZFT] 🛠️ v${VERSION} | ZFT Tension Pool initializing`);
 
 let poolApp = null;
 
+Hooks.once("diceSoNiceReady", (dice3d) => {
+  registerDiceSoNice(dice3d);
+});
+
 Hooks.once("init", () => {
+  registerTensionDie();
   registerSettings();
 });
 

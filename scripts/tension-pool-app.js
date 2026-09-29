@@ -1,22 +1,18 @@
 import { MODULE_ID } from "./constants.js";
 import { getSetting, setSetting } from "./settings.js";
 import { getState } from "./state.js";
-import { getProfiles, getActiveProfile, setActiveProfile } from "./profiles.js";
+import { getActiveProfile } from "./profiles.js";
 import { addTime, rollRisk, addTimeAndRisk, addTension, removeTension, breakPool, getRiskChance } from "./engine.js";
 import { TensionConfigApp } from "./tension-config-app.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
-function formatHistory(entry, showReason) {
-  const when = new Date(entry.at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-  const reason = showReason && entry.reason ? ` · ${entry.reason}` : "";
-  switch (entry.type) {
-    case "add": return `${when} · +${entry.amount} tension${reason}`;
-    case "remove": return `${when} · -${entry.amount} tension${reason}`;
-    case "roll": return `${when} · ${entry.mode === "clear" ? "Pool break" : "Risk roll"} · ${entry.complicationCount} complication(s)${reason}`;
-    case "reset": return `${when} · Pool reset${reason}`;
-    default: return `${when} · ${entry.type}${reason}`;
-  }
+function clampPosition(left, top, width, height) {
+  const margin = 8;
+  return {
+    left: Math.min(Math.max(left, margin), Math.max(margin, window.innerWidth - width - margin)),
+    top: Math.min(Math.max(top, margin), Math.max(margin, window.innerHeight - height - margin)),
+  };
 }
 
 export class TensionPoolApp extends HandlebarsApplicationMixin(ApplicationV2) {
@@ -42,8 +38,9 @@ export class TensionPoolApp extends HandlebarsApplicationMixin(ApplicationV2) {
   };
 
   #renderTimer = null;
-  #drag = null;
+  #dragState = null;
   #boundResize = null;
+  #previousDiceCount = -1;
 
   debouncedRender() {
     clearTimeout(this.#renderTimer);
@@ -53,108 +50,118 @@ export class TensionPoolApp extends HandlebarsApplicationMixin(ApplicationV2) {
   async _prepareContext() {
     const state = getState();
     const profile = getActiveProfile();
-    const profiles = getProfiles();
     const collapsed = Boolean(getSetting("collapsed"));
-    const chance = getRiskChance();
-    const showReasons = game.user.isGM || profile.showReasonsToPlayers;
-    const history = [...state.history].slice(-5).reverse().map((entry) => ({
-      text: formatHistory(entry, showReasons),
-    }));
+    const riskChance = `${(getRiskChance() * 100).toFixed(1)}%`;
 
-    const slots = Array.from({ length: profile.poolSize }, (_, index) => ({
-      filled: index < state.diceCount,
-    }));
+    const icons = state.diceCount === 0
+      ? [{ class: "fa-regular fa-skull" }]
+      : Array.from({ length: state.diceCount }, () => ({ class: "fa-solid fa-skull" }));
 
     return {
       isGM: game.user.isGM,
       collapsed,
       state,
       profile,
-      profiles: Object.values(profiles).map((item) => ({ ...item, selected: item.id === profile.id })),
-      slots,
-      history,
-      riskChance: `${(chance * 100).toFixed(1)}%`,
-      dieLabel: `d${profile.dieFaces}`,
+      icons,
+      compactIcon: state.diceCount === 0 ? "fa-regular fa-skull" : "fa-solid fa-skull",
+      poolTooltip: `${profile.name} · ${state.diceCount}/${profile.poolSize} d${profile.dieFaces} · Risk ${riskChance}`,
+      toggleIcon: collapsed ? "fa-chevron-up" : "fa-chevron-down",
+      toggleTooltip: collapsed ? "Expand Tension Pool" : "Compact Tension Pool",
     };
   }
 
   async _onRender() {
     const element = this.element;
     if (!element) return;
+
     element.style.position = "fixed";
-    this.#restorePosition();
+    this.#applySavedPosition();
 
     const handle = element.querySelector("[data-drag-handle]");
     handle?.addEventListener("pointerdown", (event) => this.#startDrag(event));
 
-    const profileSelect = element.querySelector('[name="profile"]');
-    profileSelect?.addEventListener("change", async (event) => {
-      if (!game.user.isGM) return;
-      await setActiveProfile(event.currentTarget.value);
-    });
-
     if (!this.#boundResize) {
-      this.#boundResize = () => this.#restorePosition(true);
+      this.#boundResize = () => this.#applySavedPosition();
       window.addEventListener("resize", this.#boundResize);
     }
+
+    const currentCount = getState().diceCount;
+    if (this.#previousDiceCount >= 0 && this.#previousDiceCount !== currentCount) {
+      const icons = element.querySelectorAll(".zft-tp-icons i");
+      const animation = currentCount > this.#previousDiceCount ? "zft-tp-pulse" : "zft-tp-fade";
+      icons.forEach((icon) => {
+        icon.classList.add(animation);
+        icon.addEventListener("animationend", () => icon.classList.remove(animation), { once: true });
+      });
+    }
+    this.#previousDiceCount = currentCount;
   }
 
-  #restorePosition(clampOnly = false) {
+  #applySavedPosition() {
     const element = this.element;
     if (!element) return;
+
     const saved = getSetting("windowPosition");
-    const width = element.offsetWidth || 360;
-    const height = element.offsetHeight || 120;
-    const maxLeft = Math.max(8, window.innerWidth - width - 8);
-    const maxTop = Math.max(8, window.innerHeight - height - 8);
+    const width = element.offsetWidth || 180;
+    const height = element.offsetHeight || 60;
 
     let left;
     let top;
     if (saved?.leftPct != null && saved?.topPct != null) {
-      left = Math.round(saved.leftPct * window.innerWidth);
-      top = Math.round(saved.topPct * window.innerHeight);
-    } else if (!clampOnly) {
-      left = Math.round((window.innerWidth - width) / 2);
-      top = 80;
+      left = saved.leftPct * window.innerWidth;
+      top = saved.topPct * window.innerHeight;
     } else {
-      left = parseInt(element.style.left, 10) || 8;
-      top = parseInt(element.style.top, 10) || 8;
+      left = (window.innerWidth - width) / 2;
+      top = 80;
     }
 
-    left = Math.min(Math.max(left, 8), maxLeft);
-    top = Math.min(Math.max(top, 8), maxTop);
-    element.style.left = `${left}px`;
-    element.style.top = `${top}px`;
+    const clamped = clampPosition(left, top, width, height);
+    element.style.left = `${Math.round(clamped.left)}px`;
+    element.style.top = `${Math.round(clamped.top)}px`;
   }
 
   #startDrag(event) {
-    if (event.button !== 0 || event.target.closest("button, select, input")) return;
+    if (event.button !== 0 || event.target.closest("button")) return;
     const element = this.element;
     if (!element) return;
+
     const rect = element.getBoundingClientRect();
-    this.#drag = { x: event.clientX, y: event.clientY, left: rect.left, top: rect.top };
-
-    const move = (moveEvent) => {
-      if (!this.#drag) return;
-      element.style.left = `${this.#drag.left + (moveEvent.clientX - this.#drag.x)}px`;
-      element.style.top = `${this.#drag.top + (moveEvent.clientY - this.#drag.y)}px`;
+    this.#dragState = {
+      startX: event.clientX,
+      startY: event.clientY,
+      startLeft: rect.left,
+      startTop: rect.top,
     };
 
-    const up = async () => {
-      document.removeEventListener("pointermove", move);
-      document.removeEventListener("pointerup", up);
-      this.#restorePosition(true);
-      const left = parseInt(element.style.left, 10) || 0;
-      const top = parseInt(element.style.top, 10) || 0;
+    const onMove = (moveEvent) => {
+      if (!this.#dragState) return;
+      element.style.left = `${this.#dragState.startLeft + moveEvent.clientX - this.#dragState.startX}px`;
+      element.style.top = `${this.#dragState.startTop + moveEvent.clientY - this.#dragState.startY}px`;
+    };
+
+    const onUp = async () => {
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerup", onUp);
+
+      if (!this.#dragState) return;
+
+      const rawLeft = parseFloat(element.style.left) || 0;
+      const rawTop = parseFloat(element.style.top) || 0;
+      const clamped = clampPosition(rawLeft, rawTop, element.offsetWidth, element.offsetHeight);
+
+      element.style.left = `${Math.round(clamped.left)}px`;
+      element.style.top = `${Math.round(clamped.top)}px`;
+
       await setSetting("windowPosition", {
-        leftPct: left / Math.max(window.innerWidth, 1),
-        topPct: top / Math.max(window.innerHeight, 1),
+        leftPct: clamped.left / Math.max(window.innerWidth, 1),
+        topPct: clamped.top / Math.max(window.innerHeight, 1),
       });
-      this.#drag = null;
+
+      this.#dragState = null;
     };
 
-    document.addEventListener("pointermove", move);
-    document.addEventListener("pointerup", up);
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
   }
 
   static async _onToggle() {

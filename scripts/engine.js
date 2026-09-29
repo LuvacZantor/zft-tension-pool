@@ -5,6 +5,7 @@ import { buildAddPlan, clampInt, countComplications, calculateComplicationChance
 import { postRollMessage } from "./chat.js";
 import { resolveComplications } from "./resolver.js";
 import { debug, warn } from "./logger.js";
+import { updateDiceSoNicePreset } from "./tension-die.js";
 
 function requireGM() {
   if (game.user?.isGM) return true;
@@ -48,7 +49,8 @@ export async function rollPool({ mode = "risk", reason = "", forceDiceCount = nu
   const diceCount = Math.max(requested, 1);
 
   debug(`Rolling ${diceCount}d${profile.dieFaces} (${mode})`, { storedCount, reason });
-  const roll = await new Roll(`${diceCount}d${profile.dieFaces}`).evaluate();
+  if (game.dice3d) updateDiceSoNicePreset(game.dice3d, profile);
+  const roll = await new Roll(`${diceCount}dt`).evaluate();
   await show3dDice(roll, profile.rollVisibility);
   const results = rollResults(roll).sort((a, b) => a - b);
   const complicationCount = countComplications(results, profile.triggerValues);
@@ -82,7 +84,9 @@ export async function rollPool({ mode = "risk", reason = "", forceDiceCount = nu
   Hooks.callAll(HOOKS.ROLLED, rollResult);
 
   let complication = null;
-  if (complicationCount > 0) complication = await resolveComplications({ profile, rollResult });
+  if (complicationCount > 0) {
+    complication = await resolveComplications({ profile, rollResult });
+  }
 
   return { roll: rollResult, complication, state };
 }

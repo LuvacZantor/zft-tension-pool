@@ -5,9 +5,10 @@ ZFT Tension Pool was designed after reviewing the open-source project
 That project is distributed under the MIT License.
 
 The ZFT implementation is independently structured around a separate state,
-rules, complication, profile, API, and UI architecture. This notice is retained
-for attribution and for any portions or patterns that may be derived from the
-reviewed project.
+rules, complication, profile, API, and UI architecture. The compact two-row
+widget layout, drag-position handling pattern, tension icon presentation, and
+custom Dice So Nice tension-die pattern are adapted from Tension Pool 2. This
+notice is retained for attribution of those MIT-licensed portions and patterns.
 
 ## Tension Pool 2 MIT Notice
 

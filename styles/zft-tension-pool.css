@@ -1,74 +1,109 @@
-.zft-tension-pool {
+#zft-tension-pool {
   z-index: 80;
   pointer-events: auto;
+  background: none;
+  border: none;
+  padding: 0;
 }
 
-.zft-tension-pool .window-content,
-.zft-tension-pool .application-content {
+#zft-tension-pool .window-content,
+#zft-tension-pool .application-content {
   padding: 0;
   background: transparent;
   overflow: visible;
 }
 
-.zft-tp-shell {
-  width: 390px;
-  padding: 10px;
-  border: 1px solid rgba(190, 35, 45, 0.8);
-  border-radius: 10px;
-  background: rgba(18, 18, 22, 0.94);
-  color: #eee;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+#zft-tension-pool .zft-tp-wrapper {
+  display: grid;
+  grid-template-rows: repeat(2, 24px);
+  grid-auto-flow: column;
+  align-items: center;
+  justify-items: center;
+  gap: 4px;
+  background: rgba(11, 10, 19, 0.78);
+  border: 1px solid rgb(48, 40, 49);
+  border-radius: 6px;
+  padding: 6px;
+  cursor: grab;
   user-select: none;
-  backdrop-filter: blur(4px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
 }
 
-.zft-tp-shell.is-collapsed { width: auto; min-width: 130px; padding: 6px 8px; }
+#zft-tension-pool .zft-tp-wrapper:active {
+  cursor: grabbing;
+}
 
-.zft-tp-header,
-.zft-tp-status,
-.zft-tp-profile-row,
-.zft-tp-actions,
-.zft-tp-config-footer,
-.zft-tp-inline-actions {
+#zft-tension-pool .zft-tp-cell {
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
-}
-
-.zft-tp-header { justify-content: space-between; gap: 8px; cursor: grab; }
-.zft-tp-title { display: flex; align-items: center; gap: 7px; font-weight: 700; letter-spacing: 0.03em; }
-.zft-tp-header-actions { display: flex; gap: 4px; }
-.zft-tp-header button,
-.zft-tp-actions button { min-width: 30px; height: 30px; margin: 0; }
-
-.zft-tp-profile-row { gap: 8px; margin-top: 8px; }
-.zft-tp-profile-row label { font-size: 0.8rem; opacity: 0.75; }
-.zft-tp-profile-row select { flex: 1; min-width: 0; }
-
-.zft-tp-pool {
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 9px;
-  margin: 12px 0 8px;
-  min-height: 30px;
-  font-size: 1.55rem;
 }
 
-.zft-tp-pool .fa-skull { color: #d84a55; text-shadow: 0 0 8px rgba(216, 74, 85, 0.4); }
-.zft-tp-pool .fa-circle { opacity: 0.3; }
-.zft-tp-status { justify-content: space-between; font-size: 0.78rem; opacity: 0.82; }
-.zft-tp-actions { gap: 6px; margin-top: 8px; }
-.zft-tp-actions.primary button { flex: 1; }
-.zft-tp-actions.secondary button:first-child { flex: 1; }
-.zft-tp-actions.secondary button:last-child { flex: 1; }
+#zft-tension-pool .zft-tp-drag-handle {
+  color: #e0d6c8;
+  opacity: 0.65;
+}
 
-.zft-tp-history {
-  margin-top: 9px;
-  padding-top: 7px;
-  border-top: 1px solid rgba(255,255,255,0.12);
-  font-size: 0.72rem;
-  line-height: 1.35;
-  opacity: 0.75;
+#zft-tension-pool button.ui-control {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  margin: 0;
+  padding: 0;
+  font-size: var(--font-size-14);
+}
+
+#zft-tension-pool .zft-tp-icons,
+#zft-tension-pool .zft-tp-compact-icons {
+  display: grid;
+  grid-template-rows: repeat(2, 24px);
+  align-items: center;
+  justify-items: center;
+  gap: 4px;
+  grid-row: 1 / -1;
+  padding: 0 4px;
+  font-size: var(--font-size-14);
+  color: #e0d6c8;
+}
+
+#zft-tension-pool .zft-tp-icons {
+  grid-template-rows: repeat(2, 1fr);
+  grid-auto-flow: column;
+  align-self: stretch;
+}
+
+#zft-tension-pool .zft-tp-compact-count {
+  font-size: var(--font-size-14);
+  line-height: 1;
+}
+
+#zft-tension-pool .zft-tp-config-cell {
+  grid-row: 1 / -1;
+  align-self: center;
+}
+
+@keyframes zft-tp-icon-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes zft-tp-icon-fade {
+  0% { opacity: 1; }
+  50% { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+
+#zft-tension-pool .zft-tp-icons i.zft-tp-pulse {
+  animation: zft-tp-icon-pulse 0.5s ease-in-out;
+}
+
+#zft-tension-pool .zft-tp-icons i.zft-tp-fade {
+  animation: zft-tp-icon-fade 0.4s ease-in-out;
 }
 
 .zft-tp-chat-card {
@@ -99,6 +134,6 @@
 .zft-tension-config .window-content { padding: 12px; }
 .zft-tp-config-body fieldset { margin: 12px 0; padding: 10px; }
 .zft-tp-config-body legend { font-weight: 700; }
-.zft-tp-inline-actions { gap: 5px; margin-left: 8px; }
-.zft-tp-config-footer { justify-content: space-between; gap: 10px; margin-top: 14px; }
+.zft-tp-inline-actions { display: flex; align-items: center; gap: 5px; margin-left: 8px; }
+.zft-tp-config-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
 .zft-tp-config-footer button { flex: 1; }

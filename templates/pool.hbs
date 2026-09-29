@@ -1,65 +1,50 @@
-<section class="zft-tp-shell {{#if collapsed}}is-collapsed{{/if}}" data-drag-handle>
-  <header class="zft-tp-header">
-    <div class="zft-tp-title">
-      <i class="fa-solid fa-hourglass-half"></i>
-      {{#if collapsed}}
-        <span>{{state.diceCount}}/{{profile.poolSize}}</span>
-      {{else}}
-        <span>{{profile.name}}</span>
-      {{/if}}
+<div class="zft-tp-wrapper">
+  <div class="zft-tp-cell zft-tp-drag-handle" data-drag-handle data-tooltip="{{poolTooltip}}" data-tooltip-direction="LEFT">
+    <i class="fa-solid fa-hourglass-half"></i>
+  </div>
+  <div class="zft-tp-cell">
+    <button type="button" class="ui-control fa-solid {{toggleIcon}} icon" data-action="toggle" data-tooltip="{{toggleTooltip}}" data-tooltip-direction="LEFT" aria-label="Toggle Tension Pool"></button>
+  </div>
+
+  {{#if isGM}}
+    <div class="zft-tp-cell">
+      <button type="button" class="ui-control fa-solid fa-plus icon" data-action="addTime" data-tooltip="Add Tension: Time-Consuming Action" data-tooltip-direction="LEFT" aria-label="Add Tension"></button>
     </div>
-    <div class="zft-tp-header-actions">
-      {{#if isGM}}
-        <button type="button" data-action="configure" data-tooltip="Configure"><i class="fa-solid fa-gear"></i></button>
-      {{/if}}
-      <button type="button" data-action="toggle" data-tooltip="{{#if collapsed}}Expand{{else}}Collapse{{/if}}">
-        <i class="fa-solid {{#if collapsed}}fa-chevron-down{{else}}fa-chevron-up{{/if}}"></i>
-      </button>
+    <div class="zft-tp-cell">
+      <button type="button" class="ui-control fa-solid fa-minus icon" data-action="remove" data-tooltip="Remove 1 Tension" data-tooltip-direction="LEFT" aria-label="Remove Tension"></button>
     </div>
-  </header>
+  {{/if}}
+
+  {{#if collapsed}}
+    <div class="zft-tp-compact-icons" data-tooltip="{{poolTooltip}}">
+      <i class="{{compactIcon}}"></i>
+      <span class="zft-tp-compact-count">{{state.diceCount}}</span>
+    </div>
+  {{else}}
+    <div class="zft-tp-icons" data-tooltip="{{poolTooltip}}">
+      {{#each icons}}
+        <i class="{{class}}"></i>
+      {{/each}}
+    </div>
+  {{/if}}
 
   {{#unless collapsed}}
     {{#if isGM}}
-      <div class="zft-tp-profile-row">
-        <label>Profile</label>
-        <select name="profile">
-          {{#each profiles}}
-            <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
-          {{/each}}
-        </select>
+      <div class="zft-tp-cell">
+        <button type="button" class="ui-control fa-solid fa-dice icon" data-action="risk" data-tooltip="Roll Risk: Reckless Action (Pool Remains)" data-tooltip-direction="RIGHT" aria-label="Roll Risk"></button>
       </div>
-    {{/if}}
-
-    <div class="zft-tp-pool" data-tooltip="Risk roll: {{riskChance}} complication chance">
-      {{#each slots}}
-        <i class="{{#if filled}}fa-solid fa-skull{{else}}fa-regular fa-circle{{/if}}"></i>
-      {{/each}}
-    </div>
-
-    <div class="zft-tp-status">
-      <span>{{state.diceCount}} / {{profile.poolSize}} {{dieLabel}}</span>
-      <span>Risk {{riskChance}}</span>
-    </div>
-
-    {{#if isGM}}
-      <div class="zft-tp-actions primary">
-        <button type="button" data-action="addTime" data-tooltip="Time-Consuming: add one die"><i class="fa-solid fa-clock"></i> Time</button>
-        <button type="button" data-action="risk" data-tooltip="Reckless: roll pool and return dice"><i class="fa-solid fa-dice"></i> Risk</button>
-        <button type="button" data-action="timeRisk" data-tooltip="Time-Consuming + Reckless"><i class="fa-solid fa-bolt"></i> Both</button>
+      <div class="zft-tp-cell">
+        <button type="button" class="ui-control fa-solid fa-bolt icon" data-action="timeRisk" data-tooltip="Time + Risk: Add 1, Then Roll" data-tooltip-direction="RIGHT" aria-label="Time and Risk"></button>
       </div>
-      <div class="zft-tp-actions secondary">
-        <button type="button" data-action="custom" data-tooltip="Add custom tension"><i class="fa-solid fa-plus"></i> Custom</button>
-        <button type="button" data-action="remove" data-tooltip="GM adjustment: remove one die"><i class="fa-solid fa-minus"></i></button>
-        <button type="button" data-action="breakPool" data-tooltip="Roll and clear current pool"><i class="fa-solid fa-burst"></i> Break</button>
+      <div class="zft-tp-cell">
+        <button type="button" class="ui-control fa-solid fa-layer-plus icon" data-action="custom" data-tooltip="Add Multiple Tension Dice" data-tooltip-direction="RIGHT" aria-label="Add Multiple Tension Dice"></button>
       </div>
-    {{/if}}
-
-    {{#if history.length}}
-      <div class="zft-tp-history">
-        {{#each history}}
-          <div>{{text}}</div>
-        {{/each}}
+      <div class="zft-tp-cell">
+        <button type="button" class="ui-control fa-solid fa-dice-d20 icon" data-action="breakPool" data-tooltip="Roll & Clear Pool" data-tooltip-direction="RIGHT" aria-label="Roll and Clear Pool"></button>
+      </div>
+      <div class="zft-tp-cell zft-tp-config-cell">
+        <button type="button" class="ui-control fa-solid fa-gear icon" data-action="configure" data-tooltip="Tension Pool Settings" data-tooltip-direction="RIGHT" aria-label="Tension Pool Settings"></button>
       </div>
     {{/if}}
   {{/unless}}
-</section>
+</div>
