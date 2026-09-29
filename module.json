@@ -1,8 +1,8 @@
 {
   "id": "zft-tension-pool",
   "title": "ZFT Tension Pool",
-  "description": "A system-driven Tension Pool for Foundry VTT with time/risk actions, profiles, complication RollTables, history, and an extensible API.",
-  "version": "0.1.1",
+  "description": "A system-driven Tension Pool for Foundry VTT with time/risk actions, profiles, complication RollTables, history, sounds, and an extensible API.",
+  "version": "0.1.2",
   "authors": [
     {
       "name": "LuvacZantor",

@@ -2,7 +2,7 @@
 
 A system-driven Tension Pool module for Foundry Virtual Tabletop.
 
-Version: 0.1.1
+Version: 0.1.2
 
 ## Compatibility
 
@@ -37,8 +37,21 @@ The default profile follows the published Tension Pool procedure:
 - Optional public notice when secret rolls/complications occur.
 - Persistent recent event history.
 - Optional Dice So Nice integration using a custom tension die with marked complication faces.
+- Configurable sound effects for adding tension, removing tension, and rolling/breaking the pool.
 - Public module API and custom hooks.
 - Focused `[ZFT]` debug logging.
+
+## Sound effects
+
+Sound effects are enabled by default and can be disabled or replaced in Foundry module settings.
+
+Default mapping:
+
+- Add tension: Metal Hit
+- Remove tension: Magical Notification Tone - Soft Fantasy Digital Alert
+- Roll / break: Evil Bell
+
+The included audio files are Pixabay Content License assets and are not covered by the module's MIT source-code license. See `THIRD_PARTY_ASSETS.md`.
 
 ## Complication resolution
 
@@ -70,36 +83,10 @@ console.log(api.getProfile());
 console.log(api.getRiskChance());
 ```
 
-### Hooks
-
-```js
-Hooks.on("zftTensionPoolReady", (api) => {});
-Hooks.on("zftTensionPoolStateChanged", (state) => {});
-Hooks.on("zftTensionPoolProfilesChanged", (profiles) => {});
-Hooks.on("zftTensionPoolRolled", (rollResult) => {});
-Hooks.on("zftTensionPoolComplication", (complicationResult) => {});
-```
-
-## Installation for development
-
-Copy the `zft-tension-pool` directory into Foundry's `Data/modules/` directory, restart Foundry, enable the module in a test world, and refresh the browser.
-
-## Initial validation
-
-1. Enable the module in a V13 Build 351 or V14 test world.
-2. Confirm the floating widget appears for GM and players.
-3. Use the plus icon five times. Expected: five solid skulls appear.
-4. Use the dice icon. Expected: 5 tension dice roll and the pool remains at five skulls.
-5. Use the plus icon again. Expected: the sixth die causes a six-die roll and the pool clears.
-6. With an empty pool, use the dice icon. Expected: one temporary tension die rolls and the pool remains empty.
-7. Configure a Normal RollTable UUID and force a complication. Expected: complication result is posted according to configured visibility.
-8. Configure a Severe RollTable and threshold, then generate enough trigger faces. Expected: the Severe table is used once.
-9. Change profiles from the configuration window. Expected: pool size, die size, trigger faces, and risk tooltip update.
-10. Drag the hourglass handle, release it, and refresh. Expected: the widget remains at the saved position.
-11. Enable debug logging and confirm diagnostic messages begin with `[ZFT]`.
-
 ## Attribution
 
 The module was designed after reviewing `sagarc03/tension-pool-2`, an MIT-licensed Foundry module. See `THIRD_PARTY_NOTICES.md`.
+
+The included audio assets remain under the Pixabay Content License. See `THIRD_PARTY_ASSETS.md`.
 
 The Tension Pool game mechanic is associated with The Angry GM. This project is not affiliated with or endorsed by The Angry GM.

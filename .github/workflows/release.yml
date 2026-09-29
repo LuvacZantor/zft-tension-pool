@@ -29,8 +29,10 @@ jobs:
             templates \
             styles \
             lang \
+            assets \
             LICENSE \
             THIRD_PARTY_NOTICES.md \
+            THIRD_PARTY_ASSETS.md \
             README.md \
             CHANGELOG.md
 

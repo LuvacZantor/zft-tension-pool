@@ -1,4 +1,12 @@
 {
+  "ZFT_TENSION.Settings.SoundEnabled.Name": "ZFT Tension Pool: Sound Effects",
+  "ZFT_TENSION.Settings.SoundEnabled.Hint": "Play tension pool sound effects for adding, removing, and rolling tension dice.",
+  "ZFT_TENSION.Settings.AddSound.Name": "ZFT Tension Pool: Add Tension Sound",
+  "ZFT_TENSION.Settings.AddSound.Hint": "Audio file played when tension is added without immediately filling the pool.",
+  "ZFT_TENSION.Settings.RemoveSound.Name": "ZFT Tension Pool: Remove Tension Sound",
+  "ZFT_TENSION.Settings.RemoveSound.Hint": "Audio file played when tension is removed.",
+  "ZFT_TENSION.Settings.RollSound.Name": "ZFT Tension Pool: Roll / Break Sound",
+  "ZFT_TENSION.Settings.RollSound.Hint": "Audio file played whenever the tension pool is rolled or breaks.",
   "ZFT_TENSION.Settings.Debug.Name": "ZFT Tension Pool: Debug Logging",
   "ZFT_TENSION.Settings.Debug.Hint": "Enable focused [ZFT] diagnostic logging for the tension pool module."
 }

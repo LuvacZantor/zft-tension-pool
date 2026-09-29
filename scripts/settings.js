@@ -2,6 +2,7 @@ import {
   MODULE_ID,
   DEFAULT_PROFILE,
   DEFAULT_STATE,
+  DEFAULT_SOUNDS,
   HOOKS,
   clone,
 } from "./constants.js";
@@ -36,6 +37,45 @@ export function registerSettings() {
     type: Boolean,
     default: false,
     onChange: (value) => Hooks.callAll(HOOKS.UI_CHANGED, { collapsed: value }),
+  });
+
+  game.settings.register(MODULE_ID, "soundEnabled", {
+    name: "ZFT_TENSION.Settings.SoundEnabled.Name",
+    hint: "ZFT_TENSION.Settings.SoundEnabled.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true,
+  });
+
+  game.settings.register(MODULE_ID, "addSound", {
+    name: "ZFT_TENSION.Settings.AddSound.Name",
+    hint: "ZFT_TENSION.Settings.AddSound.Hint",
+    scope: "world",
+    config: true,
+    type: String,
+    filePicker: "audio",
+    default: DEFAULT_SOUNDS.add,
+  });
+
+  game.settings.register(MODULE_ID, "removeSound", {
+    name: "ZFT_TENSION.Settings.RemoveSound.Name",
+    hint: "ZFT_TENSION.Settings.RemoveSound.Hint",
+    scope: "world",
+    config: true,
+    type: String,
+    filePicker: "audio",
+    default: DEFAULT_SOUNDS.remove,
+  });
+
+  game.settings.register(MODULE_ID, "rollSound", {
+    name: "ZFT_TENSION.Settings.RollSound.Name",
+    hint: "ZFT_TENSION.Settings.RollSound.Hint",
+    scope: "world",
+    config: true,
+    type: String,
+    filePicker: "audio",
+    default: DEFAULT_SOUNDS.roll,
   });
 
   game.settings.register(MODULE_ID, "debug", {

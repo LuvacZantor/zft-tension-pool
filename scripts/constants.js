@@ -1,6 +1,6 @@
 export const MODULE_ID = "zft-tension-pool";
 export const MODULE_TITLE = "ZFT Tension Pool";
-export const VERSION = "0.1.1";
+export const VERSION = "0.1.2";
 
 export const HOOKS = Object.freeze({
   READY: "zftTensionPoolReady",
@@ -9,6 +9,12 @@ export const HOOKS = Object.freeze({
   UI_CHANGED: "zftTensionPoolUIChanged",
   ROLLED: "zftTensionPoolRolled",
   COMPLICATION: "zftTensionPoolComplication",
+});
+
+export const DEFAULT_SOUNDS = Object.freeze({
+  add: `modules/${MODULE_ID}/assets/sounds/freesound_community-pearl-mlx-16-floor-tom-104999.mp3`,
+  remove: `modules/${MODULE_ID}/assets/sounds/diogodasilvasimoes-magical-notification-tone-soft-fantasy-digital-alert-438278.mp3`,
+  roll: `modules/${MODULE_ID}/assets/sounds/soundreality-evil-bell-343686.mp3`,
 });
 
 export const DEFAULT_PROFILE = Object.freeze({

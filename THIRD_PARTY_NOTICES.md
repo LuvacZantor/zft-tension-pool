@@ -10,6 +10,9 @@ widget layout, drag-position handling pattern, tension icon presentation, and
 custom Dice So Nice tension-die pattern are adapted from Tension Pool 2. This
 notice is retained for attribution of those MIT-licensed portions and patterns.
 
+Bundled audio files are separate third-party assets and are not covered by the
+MIT source-code license. See THIRD_PARTY_ASSETS.md.
+
 ## Tension Pool 2 MIT Notice
 
 Copyright (c) 2026 sagarc03

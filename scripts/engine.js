@@ -6,6 +6,7 @@ import { postRollMessage } from "./chat.js";
 import { resolveComplications } from "./resolver.js";
 import { debug, warn } from "./logger.js";
 import { updateDiceSoNicePreset } from "./tension-die.js";
+import { playSound } from "./audio.js";
 
 function requireGM() {
   if (game.user?.isGM) return true;
@@ -49,6 +50,7 @@ export async function rollPool({ mode = "risk", reason = "", forceDiceCount = nu
   const diceCount = Math.max(requested, 1);
 
   debug(`Rolling ${diceCount}d${profile.dieFaces} (${mode})`, { storedCount, reason });
+  await playSound("roll");
   if (game.dice3d) updateDiceSoNicePreset(game.dice3d, profile);
   const roll = await new Roll(`${diceCount}dt`).evaluate();
   await show3dDice(roll, profile.rollVisibility);
@@ -115,6 +117,8 @@ export async function addTension({ amount = 1, reason = "Time-consuming action",
     if (step.type === "fill") {
       const result = await rollPool({ mode: "clear", reason: "The tension pool filled." });
       if (result) rolls.push(result);
+    } else if (step.added > 0) {
+      await playSound("add");
     }
   }
 
@@ -145,11 +149,13 @@ export async function removeTension(amount = 1, reason = "GM adjustment") {
   const removeAmount = clampInt(amount, 1, 100, 1);
   const previous = state.diceCount;
   state.diceCount = Math.max(0, previous - removeAmount);
+  const removed = previous - state.diceCount;
   state = await writeHistory(state, profile, "remove", {
     reason,
-    amount: previous - state.diceCount,
+    amount: removed,
     resultingCount: state.diceCount,
   });
+  if (removed > 0) await playSound("remove");
   return state;
 }
 
